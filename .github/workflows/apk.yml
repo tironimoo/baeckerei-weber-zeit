@@ -40,11 +40,12 @@ jobs:
       - uses: actions/upload-artifact@v4
         with: { name: weber-zeit-apk, path: weber-zeit.apk }
       - name: Release anlegen
-        if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('app-{0}', github.run_number) }}
+          name: ${{ github.ref_type == 'tag' && github.ref_name || format('Android-App Build {0}', github.run_number) }}
           files: weber-zeit.apk
-          prerelease: ${{ contains(github.ref_name, '-') }}
+          prerelease: ${{ github.ref_type != 'tag' }}
           generate_release_notes: false
           body: |
             Android-App (Debug-Signatur) für das Geschäftstablet und das Handy der Mitarbeiterin.
