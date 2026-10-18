@@ -11,7 +11,7 @@ und auf dem Geschäftstablet läuft, dazu eine Android-App mit denselben Funktio
 - Anmeldung der Chefin mit Authenticator-App (zweiter Faktor).
 
 **Datenschutz in Kürze:** keine fremden Dienste im Browser (Schriften und Code liegen im Projekt), Daten in Supabase
-(Rechenzentrum Frankfurt), jede Änderung im Protokoll, automatische Löschung nach 2 Jahren. Details: [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md).
+(Rechenzentrum in der EU, derzeit Irland), jede Änderung im Protokoll, automatische Löschung nach 2 Jahren. Details: [docs/DATENSCHUTZ.md](docs/DATENSCHUTZ.md).
 
 ## Loslegen
 

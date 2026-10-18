@@ -4,7 +4,7 @@ Dauer etwa 30 Minuten. Menünamen bei Supabase und GitHub ändern sich gelegentl
 
 ## 1. Supabase-Projekt
 
-1. Auf supabase.com mit dem GitHub-Konto anmelden, **New project**. Name `baeckerei-weber-zeit`, **Region: Central EU (Frankfurt)**, Plan Free. Die Region lässt sich später nicht mehr ändern. Prüfen: *Project Settings > General*.
+1. Auf supabase.com mit dem GitHub-Konto anmelden, **New project**. Name `baeckerei-weber-zeit`, **Region: eine EU-Region** (Frankfurt oder Irland, beide sind für die DSGVO gleichwertig), Plan Free. Die Region lässt sich später nicht mehr ändern. Prüfen: *Project Settings > General*.
 2. **SQL Editor > New query**, den ganzen Inhalt von `supabase/schema.sql` einfügen, **Run**. Erwartet: *Success. No rows returned*. Nur einmal ausführen.
 3. **Authentication > Sign In / Providers** (oder *Settings*): **„Allow new users to sign up“ ausschalten.** Sonst kann sich jeder ein Konto anlegen.
 4. Im selben Bereich die Mindestlänge für Passwörter auf 10 setzen. Unter **Authentication > Multi-Factor** muss TOTP (Authenticator-App) aktiv sein.

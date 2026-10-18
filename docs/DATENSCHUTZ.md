@@ -27,7 +27,7 @@ Nicht gespeichert: Standort, Fotos, Gerätekennungen, Diagnosen, Analysedaten, W
 
 | Wer | Was | Absicherung |
 |---|---|---|
-| Supabase (Rechenzentrum Frankfurt) | Datenbank und Anmeldung | Auftragsverarbeitungsvertrag (DPA) annehmen, siehe Einrichtung Schritt 1.7 |
+| Supabase (Rechenzentrum in der EU, Irland) | Datenbank und Anmeldung | Auftragsverarbeitungsvertrag (DPA) annehmen, siehe Einrichtung Schritt 1.7 |
 | GitHub (GitHub Pages) | liefert die Web-App aus (nur Programmcode) | GitHub sieht beim Aufruf der Seite die IP-Adresse der Nutzerin. Im Infoblatt erwähnen. |
 | Steuerberater | Auswertung der Monatslisten | eigene Vereinbarung |
 
@@ -63,7 +63,7 @@ Nicht gespeichert: Standort, Fotos, Gerätekennungen, Diagnosen, Analysedaten, W
 
 Wir erfassen deine Arbeitszeit, weil wir dazu gesetzlich verpflichtet sind und sie für die Lohnabrechnung brauchen.
 Gespeichert werden dein Name, deine E-Mail-Adresse, Beginn, Ende und Pausen deiner Arbeit, Urlaub und Krankmeldungen (nur „krank“, ohne Diagnose) sowie ein Protokoll von Änderungen. Wir erfassen keinen Standort und machen keine Fotos.
-Die Daten liegen bei Supabase in einem Rechenzentrum in Frankfurt (Auftragsverarbeiter mit Vertrag). Die App wird über GitHub ausgeliefert, dabei sieht GitHub technisch deine IP-Adresse. Auswertungen gehen an unsere Steuerberatung.
+Die Daten liegen bei Supabase in einem Rechenzentrum in der EU, in Irland (Auftragsverarbeiter mit Vertrag). Die App wird über GitHub ausgeliefert, dabei sieht GitHub technisch deine IP-Adresse. Auswertungen gehen an unsere Steuerberatung.
 Wir löschen deine Zeiten automatisch nach 2 Jahren.
 Du hast das Recht auf Auskunft, Berichtigung, Löschung (soweit keine Pflicht zur Aufbewahrung besteht), Einschränkung der Verarbeitung und Beschwerde bei der Datenschutzaufsicht (für Hessen: Der Hessische Beauftragte für Datenschutz und Informationsfreiheit).
 Fragen an: [Name, Kontakt].
