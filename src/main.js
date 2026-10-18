@@ -4,6 +4,8 @@ import { $, dkey, esc, fmtD, fmtT, pad, tagHash, pd, mkey } from './util.js';
 import { absDates, ABS, userById } from './calc.js';
 import { viewer, isChef, sourceName } from './session.js';
 import { loginView, mfaView, enrollView, setupView, kioskView } from './views/auth.js';
+import { checkView } from './views/check.js';
+import { runChecks } from './check.js';
 import { appView, demoBar } from './views/shell.js';
 import { modalHtml, overlayHtml, csvText } from './views/modals.js';
 import { todayMin } from './calc.js';
@@ -14,6 +16,7 @@ function render() {
   const app = $('#app');
   let body;
   if (V.boot === 'loading') body = '<div class="splash"><div class="logo big-logo"></div><p class="muted">Lädt …</p></div>';
+  else if (V.boot === 'check') body = checkView();
   else if (V.boot === 'mfa') body = mfaView();
   else if (V.boot === 'enroll') body = enrollView();
   else if (V.boot === 'app') body = appView();
@@ -135,6 +138,7 @@ const SETTING_LIMITS = { weeklyHours: [1, 40], workDays: [1, 6], wage: [0, 100],
 /* ============================== Aktionen ============================== */
 const ACT = {
   noop() {},
+  async runCheck() { V.checking = true; render(); try { V.check = await runChecks(); } catch (e) { V.check = [{ name: 'Prüfung', state: 'bad', hint: e.message }]; } V.checking = false; render(); },
   device(d) { V.device = d.d; V.screen = 'home'; render(); },
   async reset() { if (api.reset) { await api.reset(); await logoutLocal(); render(); } },
   goLogin() { V.screen = 'login'; V.err = ''; render(); },
@@ -340,6 +344,7 @@ setInterval(async () => {
 
 /* ============================== Start ============================== */
 async function boot() {
+  if (new URLSearchParams(location.search).has('check')) { V.boot = 'check'; render(); ACT.runCheck(); return; }
   render();
   try {
     await api.init();

@@ -16,6 +16,7 @@ export function loginView() {
     (demo ? '<div class="hint"><b>Übungsmodus:</b> Hier liegen keine echten Daten, alles bleibt nur in diesem Browser. Mitarbeiterin <b>lena@demo</b> / <b>backen</b>. Chefin <b>chefin@demo</b> / <b>chefin</b>, Code <b>123456</b>.</div>' : '') +
     '<div class="row" style="justify-content:space-between">' +
     (V.device === 'tablet' ? '<button class="linkbtn" data-act="goHome">← Zurück zum Stempeln</button>' : (demo ? '' : '<button class="linkbtn" data-act="setupKiosk">Als Geschäftstablet einrichten</button>')) +
+    (demo ? '' : '<a class="linkbtn" href="?check">Systemprüfung</a>') +
     '</div></section>';
 }
 

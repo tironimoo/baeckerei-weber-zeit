@@ -1,6 +1,6 @@
 {
   "name": "baeckerei-weber-zeit",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Zeiterfassung für die Bäckerei Weber: Web-App (PWA), Supabase-Datenbank, Android-App",
   "scripts": {
     "build": "node scripts/build.mjs",

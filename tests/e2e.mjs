@@ -3,7 +3,7 @@ import { createRequire } from 'node:module';
 import { spawn } from 'node:child_process';
 const { chromium } = createRequire(import.meta.url)('playwright');
 
-const PORT = 4173, URL = `http://localhost:${PORT}/?demo`;
+const PORT = 4173, APP_URL = `http://localhost:${PORT}/?demo`;
 const server = spawn('python3', ['-m', 'http.server', String(PORT), '-d', 'dist', '--bind', '127.0.0.1'], { stdio: 'ignore' });
 await new Promise((r) => setTimeout(r, 800));
 
@@ -17,7 +17,7 @@ async function open(viewport, shots) {
   const page = await ctx.newPage();
   page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
   page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') errors.push(m.type() + ': ' + m.text()); });
-  await page.goto(URL);
+  await page.goto(APP_URL);
   await page.waitForSelector('#app .shell');
   return { page, ctx, shot: (n) => page.screenshot({ path: `tests/out/${shots}-${n}.png`, fullPage: true }) };
 }
@@ -184,6 +184,39 @@ console.log('Sicherheit');
   ok('Mitarbeiterin sieht keine Chefin-Reiter', !txt.includes('NFC-Tags') && !txt.includes('Protokoll'));
   await page.evaluate(() => { window.__bwz.api.reset && 0; });
   await ctx.close();
+}
+
+
+/* ---------------- Systemprüfung (Supabase wird nachgestellt) ---------------- */
+console.log('Systemprüfung');
+async function checkWith(handler) {
+  const ctx = await browser.newContext({ viewport: { width: 420, height: 900 } });
+  const page = await ctx.newPage();
+  page.on('pageerror', (e) => errors.push('pageerror: ' + e.message));
+  await page.route('https://mwhpoeevjwpvqmjyczrk.supabase.co/**', (route) => {
+    const u = new URL(route.request().url());
+    const cors = { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'content-type': 'application/json' };
+    if (route.request().method() === 'OPTIONS') return route.fulfill({ status: 204, headers: cors });
+    const r = handler(u.pathname);
+    if (!r) return route.abort();
+    return route.fulfill({ status: r[0], headers: cors, body: JSON.stringify(r[1]) });
+  });
+  await page.goto(`http://localhost:${PORT}/?check`);
+  await page.waitForFunction(() => document.body.innerText.includes('Alles in Ordnung') || document.body.innerText.includes('Etwas fehlt'), null, { timeout: 15000 });
+  const t = await text(page);
+  await page.screenshot({ path: 'tests/out/check.png', fullPage: true });
+  await ctx.close();
+  return t;
+}
+{
+  let t = await checkWith((p) => p.endsWith('/auth/v1/settings') ? [200, { disable_signup: true }] : p.includes('/rpc/') ? [401, { code: '42501', message: 'permission denied for function kiosk_stamp' }] : [401, { code: '42501', message: 'permission denied for table settings' }]);
+  ok('Alles richtig eingerichtet: grüne Prüfung', t.includes('Alles in Ordnung') && !t.includes('Fehler'));
+  t = await checkWith((p) => p.endsWith('/auth/v1/settings') ? [200, { disable_signup: false }] : p.includes('/rpc/') ? [404, { code: 'PGRST202', message: 'Could not find the function' }] : [404, { code: 'PGRST205', message: 'Could not find the table public.settings in the schema cache' }]);
+  ok('Fehlendes SQL und offene Selbst-Anmeldung werden gemeldet', t.includes('Etwas fehlt') && t.includes('Noch an!') && t.includes('Tabellen fehlen') && t.includes('Funktionen fehlen'));
+  t = await checkWith((p) => p.endsWith('/auth/v1/settings') ? [200, { disable_signup: true }] : p.includes('/rpc/') ? [401, { code: '42501' }] : [200, []]);
+  ok('Ohne Anmeldung lesbare Tabellen werden gemeldet', t.includes('Ohne Anmeldung lesbar'));
+  t = await checkWith(() => null);
+  ok('Nicht erreichbarer Server wird gemeldet', t.includes('Keine Verbindung zu mwhpoeevjwpvqmjyczrk.supabase.co'));
 }
 
 await browser.close(); server.kill();

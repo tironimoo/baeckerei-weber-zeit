@@ -68,7 +68,8 @@ function accountModal(m) {
     '<div class="form"><label class="f">Neues Passwort (mindestens 10 Zeichen)<input type="password" id="pw1" autocomplete="new-password"></label>' +
     '<label class="f">Passwort wiederholen<input type="password" id="pw2" autocomplete="new-password"></label>' +
     (m.err ? `<p class="err" role="alert">${esc(m.err)}</p>` : '') + (m.ok ? `<p class="small" style="color:var(--good);font-weight:600">${esc(m.ok)}</p>` : '') +
-    '<div class="row" style="justify-content:flex-end"><button class="btn btn-ghost" data-act="closeModal">Schließen</button><button class="btn btn-primary" data-act="savePassword">Passwort ändern</button></div></div></div></div>';
+    '<div class="row" style="justify-content:flex-end"><button class="btn btn-ghost" data-act="closeModal">Schließen</button><button class="btn btn-primary" data-act="savePassword">Passwort ändern</button></div></div>' +
+    `<p class="small muted">Version ${esc(typeof __APP_VERSION__ === 'string' ? __APP_VERSION__ : 'dev')}</p></div></div>`;
 }
 
 export function modalHtml() {

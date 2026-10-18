@@ -1,6 +1,11 @@
 name: Android-App bauen
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versionsname für das Release, zum Beispiel v0.1 (leer = fortlaufende Vorabversion)'
+        required: false
+        default: ''
   push:
     tags: ['v*']
 permissions:
@@ -42,10 +47,10 @@ jobs:
       - name: Release anlegen
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || format('app-{0}', github.run_number) }}
-          name: ${{ github.ref_type == 'tag' && github.ref_name || format('Android-App Build {0}', github.run_number) }}
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || inputs.version || format('app-{0}', github.run_number) }}
+          name: ${{ github.ref_type == 'tag' && github.ref_name || inputs.version || format('Android-App Build {0}', github.run_number) }}
           files: weber-zeit.apk
-          prerelease: ${{ github.ref_type != 'tag' }}
+          prerelease: ${{ github.ref_type != 'tag' && inputs.version == '' }}
           generate_release_notes: false
           body: |
             Android-App (Debug-Signatur) für das Geschäftstablet und das Handy der Mitarbeiterin.

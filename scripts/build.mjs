@@ -2,12 +2,13 @@
 import { build } from 'esbuild';
 import { cp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+const version = JSON.parse(await readFile('package.json', 'utf8')).version;
 
 const out = 'dist';
 await rm(out, { recursive: true, force: true });
 await mkdir(`${out}/fonts`, { recursive: true });
 
-await build({ entryPoints: { app: 'src/main.js' }, bundle: true, minify: true, format: 'iife', target: 'es2020', outdir: out, logLevel: 'warning' });
+await build({ entryPoints: { app: 'src/main.js' }, bundle: true, minify: true, format: 'iife', target: 'es2020', outdir: out, logLevel: 'warning', define: { __APP_VERSION__: JSON.stringify(version) } });
 await build({ entryPoints: { app: 'src/styles.css' }, bundle: false, minify: true, outdir: out, logLevel: 'warning' });
 
 const fonts = ['figtree-latin-400-normal', 'figtree-latin-600-normal', 'figtree-latin-700-normal'];
