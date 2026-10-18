@@ -1,0 +1,7 @@
+{
+  "appId": "de.baeckerei.weber.zeit",
+  "appName": "Weber Zeit",
+  "webDir": "dist",
+  "server": { "androidScheme": "https" },
+  "android": { "allowMixedContent": false, "webContentsDebuggingEnabled": false }
+}

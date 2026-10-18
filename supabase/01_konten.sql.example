@@ -1,0 +1,14 @@
+-- Nach dem Anlegen der Konten (Supabase: Authentication > Users > Add user > Create new user,
+-- "Auto Confirm User" anhaken) einmal im SQL Editor ausführen. E-Mail-Adressen unten ersetzen.
+-- Diese Datei enthält absichtlich keine echten Adressen, weil das Repository öffentlich ist.
+
+-- Chefin
+update public.profiles set role = 'chef', full_name = 'Vorname Nachname'
+where id = (select id from auth.users where email = 'CHEFIN@BEISPIEL.DE');
+
+-- Geschäftstablet (eigenes Konto, kann nur stempeln)
+update public.profiles set role = 'kiosk', full_name = 'Tablet'
+where id = (select id from auth.users where email = 'TABLET@BEISPIEL.DE');
+
+-- Kontrolle: zeigt alle Konten mit Rolle
+select p.email, p.role, p.full_name, p.active from public.profiles p order by p.role;
