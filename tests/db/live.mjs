@@ -24,7 +24,8 @@ psql(PG.db, [], `
 insert into auth.users(id,email,raw_user_meta_data) values
  ('${ID.chef}','chef@x','{"full_name":"Elisabeth Roßner"}'),('${ID.ma}','ma@x','{"full_name":"Lena Bauer"}'),
  ('${ID.ma2}','ma2@x','{"full_name":"Zweite Person"}'),('${ID.kiosk}','tab@x','{"full_name":"Tablet"}');
-update profiles set role='chef' where id='${ID.chef}'; update profiles set role='kiosk' where id='${ID.kiosk}';
+select count(*) filter (where active) as aktiv_vor_freischaltung from profiles;
+update profiles set active=true; update profiles set role='chef' where id='${ID.chef}'; update profiles set role='kiosk' where id='${ID.kiosk}';
 insert into nfc_tags(uid_hash,label,user_id) values ('${hash('04:A2:19:7C:3B:5E:80')}','Tag Lena','${ID.ma}');`);
 const sqlq = (q) => psql(PG.db, ['-t', '-A', '-c', q]).trim();
 

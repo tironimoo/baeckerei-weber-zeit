@@ -22,7 +22,7 @@ Unter **Authentication > Users > Add user > Create new user** je ein Konto anleg
 | Tablet | nur für das Geschäftstablet, kann ausschließlich stempeln |
 | Mitarbeiterin | Handy, später |
 
-Danach im SQL Editor `supabase/01_konten.sql.example` mit den echten E-Mail-Adressen ausführen (macht das eine Konto zur Chefin und das andere zum Tablet-Konto). Die Mitarbeiterin bekommt ihr Konto später; sie erscheint dann in der App unter *Einstellungen > Personen*, wo die Chefin ihren Namen einträgt.
+Danach im SQL Editor `supabase/01_konten.sql.example` mit den echten E-Mail-Adressen ausführen (macht das eine Konto zur Chefin und das andere zum Tablet-Konto). Neue Konten sind **zunächst deaktiviert** und haben keinen Zugriff. Die Mitarbeiterin bekommt ihr Konto später; sie erscheint dann in der App unter *Einstellungen > Personen*, wo die Chefin ihren Namen einträgt und sie mit „Aktivieren“ freischaltet. Wurde die Datenbank mit der ersten Fassung von `schema.sql` angelegt, einmal `supabase/03_neue_konten_inaktiv.sql` ausführen.
 
 ## 3. Web-App veröffentlichen
 

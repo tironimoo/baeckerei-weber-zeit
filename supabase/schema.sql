@@ -129,12 +129,13 @@ language sql stable security definer set search_path = public as $$
      and coalesce(auth.jwt() ->> 'aal', 'aal1') = 'aal2'
 $$;
 
--- Neue Anmeldung legt automatisch ein Profil als Mitarbeiterin an
+-- Neues Konto legt automatisch ein Profil an, zunächst DEAKTIVIERT: Solange die Chefin es nicht
+-- freischaltet, hat das Konto keinerlei Zugriff (auch dann nicht, wenn die Selbst-Anmeldung offen wäre).
 create function public.handle_new_user() returns trigger
 language plpgsql security definer set search_path = public as $$
 begin
-  insert into public.profiles (id, email, full_name)
-  values (new.id, new.email, coalesce(new.raw_user_meta_data ->> 'full_name', ''));
+  insert into public.profiles (id, email, full_name, active)
+  values (new.id, new.email, coalesce(new.raw_user_meta_data ->> 'full_name', ''), false);
   return new;
 end $$;
 create trigger on_auth_user_created after insert on auth.users

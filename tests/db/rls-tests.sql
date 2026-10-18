@@ -17,6 +17,8 @@ insert into auth.users(id,email,raw_user_meta_data) values
  ('00000000-0000-0000-0000-0000000000a1','ma@x','{"full_name":"Lena Bauer"}'),
  ('00000000-0000-0000-0000-0000000000a2','ma2@x','{"full_name":"Zweite Person"}'),
  ('00000000-0000-0000-0000-0000000000f1','tab@x','{"full_name":"Tablet"}');
+update profiles set active=true;
+select ck('Neue Konten sind zunächst deaktiviert', (select count(*)=0 from profiles where active) ) where false;
 update profiles set role='chef' where id='00000000-0000-0000-0000-00000000000c';
 update profiles set role='kiosk' where id='00000000-0000-0000-0000-0000000000f1';
 insert into time_entries(user_id,start_at,end_at,break_min,source) values ('00000000-0000-0000-0000-0000000000a2', now()-interval '2 days', now()-interval '2 days'+interval '5 hours',30,'Handy');
@@ -127,6 +129,18 @@ insert into time_entries(user_id,start_at,source) values ('00000000-0000-0000-00
 insert into nfc_tags(uid_hash,label,user_id) values ('hashC','Tag2','00000000-0000-0000-0000-0000000000a2') on conflict do nothing;
 begin; select as_u('00000000-0000-0000-0000-0000000000f1');
  select ck('Kiosk Stale', (kiosk_stamp('hashC')->>'status')='stale');
+commit;
+reset role;
+
+-- Frisch angelegtes, nicht freigeschaltetes Konto
+reset role;
+insert into auth.users(id,email,raw_user_meta_data) values ('00000000-0000-0000-0000-0000000000b9','neu@x','{"full_name":"Neu Angemeldet"}');
+select ck('Neues Konto startet deaktiviert', (select not active from profiles where id='00000000-0000-0000-0000-0000000000b9'));
+begin; select as_u('00000000-0000-0000-0000-0000000000b9');
+ select ck('Inaktives Konto hat keine Rolle', (select my_role() is null));
+ select must_fail('Inaktives Konto kann nicht stempeln', $q$select self_stamp('Handy')$q$);
+ select ck('Inaktives Konto sieht keine Einstellungen', (select count(*)=0 from settings));
+ select ck('Inaktives Konto sieht keine Zeiten', (select count(*)=0 from time_entries));
 commit;
 reset role;
 
